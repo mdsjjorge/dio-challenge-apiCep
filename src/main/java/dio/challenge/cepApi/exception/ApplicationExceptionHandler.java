@@ -12,10 +12,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity handleException(Exception e){
-
-        log.info("get in handler");
-
-        return new ResponseEntity("Error", HttpStatus.BAD_GATEWAY);
+    public ResponseEntity handleGenericException(Exception e){
+        log.error("Generic Exception: " + e.getMessage(), e);
+        return new ResponseEntity("An error occurred: " + e.getMessage(), HttpStatus.BAD_GATEWAY);
     }
+
 }

@@ -1,9 +1,12 @@
 package dio.challenge.cepApi.controller;
 
+import dio.challenge.cepApi.exception.BadRequestException;
+import dio.challenge.cepApi.exception.ResourceNotFoundException;
 import dio.challenge.cepApi.model.Client;
 import dio.challenge.cepApi.service.ClientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Collections;
 
 
 /**
@@ -33,33 +37,53 @@ public class ClientRestController {
 	private ClientService clientService;
 
 	@GetMapping
-	public ResponseEntity<Iterable<Client>> findAll() {
-		log.info("get into findAll");
-//		return ResponseEntity.ok(clientService.findAll());
-		throw new NullPointerException();
-
+	public ResponseEntity <Iterable<?>>  findAll() {
+		try {
+			return ResponseEntity.ok(clientService.findAll());
+		} catch (BadRequestException e) {
+			String errorMessage = "Error: " + e.getMessage();
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Collections.singletonList(errorMessage));
+		}
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Client> findById(@PathVariable Long id) {
-		return ResponseEntity.ok(clientService.findById(id));
+	public ResponseEntity<?> findById(@PathVariable Long id) {
+		try {
+			Client client = clientService.findById(id);
+			return ResponseEntity.ok(client);
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found: " + e.getMessage());
+		}
 	}
 
 	@PostMapping
-	public ResponseEntity<Client> create(@RequestBody Client client) {
-		clientService.create(client);
-		return ResponseEntity.ok(client);
+	public ResponseEntity<?> create(@RequestBody Client client) {
+		try {
+			clientService.create(client);
+			return ResponseEntity.ok(client);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error: " + e.getMessage());
+		}
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Client> update(@PathVariable Long id, @RequestBody Client client) {
-		clientService.update(id, client);
-		return ResponseEntity.ok(client);
+	public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Client client) {
+		try {
+			clientService.update(id, client);
+			return ResponseEntity.ok(client);
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found: " + e.getMessage());
+		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> delete(@PathVariable Long id) {
-		clientService.delete(id);
-		return ResponseEntity.ok().build();
+	public ResponseEntity<?> delete(@PathVariable Long id) {
+		try {
+			clientService.delete(id);
+			return ResponseEntity.ok().build();
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Client not found: " + e.getMessage());
+		}
+
 	}
 }
