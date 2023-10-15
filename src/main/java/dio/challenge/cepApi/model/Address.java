@@ -3,7 +3,10 @@ package dio.challenge.cepApi.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * possibility of automatic generation of these attributes via the following website:
@@ -21,10 +24,10 @@ public class Address {
 
 	@Id
 	private String cep;
-	private String street;
-	private String complement;
-	private String district;
-	private String locale;
+	private String logradouro;
+	private String complemento;
+	private String bairro;
+	private String localidade;
 	private String uf;
 	private String ibge;
 	private String gia;

@@ -49,8 +49,8 @@ public class ClientServiceImpl implements ClientService {
 
 	@Override
 	public void update(Long id, Client client) {
-		Optional<Client> clientBd = clientRepository.findById(id);
-		if (clientBd.isPresent()) {
+		Optional<Client> clientId = clientRepository.findById(id);
+		if (clientId.isPresent()) {
 			this.saveClientWithCep(client);
 		}
 	}

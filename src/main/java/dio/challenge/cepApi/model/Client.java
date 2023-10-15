@@ -1,7 +1,7 @@
 package dio.challenge.cepApi.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 @Entity
 @Data
