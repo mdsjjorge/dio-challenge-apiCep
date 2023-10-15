@@ -2,6 +2,7 @@ package dio.challenge.cepApi.controller;
 
 import dio.challenge.cepApi.model.Client;
 import dio.challenge.cepApi.service.ClientService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author falvojr
  * @author <a href="https://github.com/mdsjjorge"> mdsjjorge </a>
  */
+
+@Slf4j
 @RestController
 @RequestMapping("clients")
 public class ClientRestController {
@@ -31,7 +34,10 @@ public class ClientRestController {
 
 	@GetMapping
 	public ResponseEntity<Iterable<Client>> findAll() {
-		return ResponseEntity.ok(clientService.findAll());
+		log.info("get into findAll");
+//		return ResponseEntity.ok(clientService.findAll());
+		throw new NullPointerException();
+
 	}
 
 	@GetMapping("/{id}")
